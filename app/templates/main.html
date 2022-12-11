@@ -1,0 +1,308 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="	https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="{% static "style.css" %}">
+    <script src="{% static "script.js" %}"></script>
+    <title>MainPage</title>
+<style>
+    body{
+    /* background-color: rgb(180, 178, 178); */
+    background-image: url("https://bit.ly/3SlIVQf");
+    /* background-image: url("https://bit.ly/2TzIOBS"); */
+  background-size:1500px ; 
+    background-repeat: no-repeat; 
+}
+.box{
+    margin-left: 40px;
+    display: inline-flex;
+    /* width: 100%; */
+}
+    
+
+#DigitalClock{
+    margin-left: 380px;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 30px;
+    margin-top: 30px;
+    color: white;
+}
+#batCanvas {
+    /* margin-right: 100px; */
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 40px;
+    display: inline;
+    margin-top: 10px;
+  }
+#BatteryLevel {
+    font-size: 20px;
+    font-family: 'Teko', sans-serif;
+    transform: translate(-50%, -50%);
+    display: inline-block;
+    margin-top: 20px;
+    color: white;
+    
+  }
+  
+  #bolt {
+    transform: translate(-50%, -50%);
+    
+  }
+
+.container1{
+    display: inline-flex;
+    margin-left: 400px;
+    margin-top: 40px;
+    
+}
+.btn{
+    margin-left: 80px;
+    width: 600px;
+    color: red;
+}
+.box2{
+    display: inline-flex;
+    width: 100%;
+    color: red;
+}
+.box2B{
+    margin-left: 100px;
+    display: inline-block;
+    /*; background-color: rgb(134, 133, 138); */
+    background-image: url("https://bit.ly/3rmj66o");
+    /* background-repeat: repeat-x;
+    background-size: 100px; */
+    height: 100px;
+    width: 900px;
+}
+
+img{
+height: 150px;
+margin-top: 80px;
+margin-left: 350px;
+width: 200px;
+border-radius: 20px;
+border: 2px solid black;
+}
+.container{
+    margin-left:100px ;
+    width: 700px;
+    padding-top: 40px;
+    color: white;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    
+    
+}
+.border{
+    border-radius: 15px;
+    margin-left: 20px;
+}
+.end{
+    margin-top: 40px;
+    margin-left: 40px;
+    color: red;
+
+}
+.button_style{
+    margin-left: 80px;
+}
+</style>    
+</head>
+
+<body>
+{% block content %}    
+    <div class="box">
+        <p style="color: white; margin-top: 40px;margin-left: 45px; font-size: 20px;">{{users.username}}'s Profile</p>
+        <div id="DigitalClock"></div>
+        <div class="container1">
+            <span id="BatteryLevel"></span>
+                <canvas id="batCanvas" width="2000" height="1000"></canvas>
+                <div id="bolt">
+                    <i class="fa-solid fa-battery-full" aria-hidden="true" id="bolt" ></i>
+                </div>
+        </div>
+    </div>
+<div class="box2">
+    <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+        <button type="button" class="btn btn-dark" style="border-radius:0 ;">Account</button><br>
+        <button type="button" class="btn btn-dark">Display</button><br>
+        <button type="button" class="btn btn-dark">Audio</button><br>
+        <button type="button" class="btn btn-dark">Controls</button><br>
+        <button type="button" class="btn btn-dark">Social Media</button><br>
+        <button type="button" class="btn btn-dark">Security Settings</button><br>
+    </div>
+<div class="box2B">
+    
+    <img src="{{ profile.image.url }}">
+    <form action="/" method="POST" enctype="multipart/form-data" >
+        {% csrf_token %}
+        {{form}}
+        <button>Upload</button>
+    </form>
+   
+    <div class="container text-center">
+        <div class="row g-2">
+          <div class="col-6">
+            <div style="margin-left:10px ;">Username:{{users.username}}</div>
+          </div>
+          <div class="col-6">
+            <div style="padding-left:10px ;">Age: {{users.age}}</div>
+          </div>
+          <div class="col-6">
+            <div style="margin-left:10px ;">Country: {{users.country}}</div>
+          </div>
+          <div class="col-6">
+            <div style="margin-left:10px ;">Email: {{users.email}}</div>
+          </div>
+        </div>
+      </div>
+      
+    <hr>
+<div class="button_style">  
+<button type="button" class="end">Game Center</button>
+<button type="button" class="end">Switch Acc</button>
+<button type="button" class="end">Solve Jam</button>
+<button type="button" class="end">Update Notes</button>
+<button type="button" class="end"><a href="{% url 'home' %}">Logout</a></button></div>
+
+</div>
+</div>
+</div>
+</div>
+
+<script>
+    function showTime(){
+    var date = new Date();
+    var h= date.getHours();
+    var m= date.getMinutes();
+    var s= date.getSeconds();
+    var session="AM";
+    if(h==0){
+        h = 12;
+    }
+    if(h>12){
+        h=h-12;
+        session="PM";
+    }
+    h =(h<10)?"0"+h:h;
+    m =(m<10)?"0"+m:m;
+    s =(s<10)?"0"+s:s;
+    document.getElementById("DigitalClock").innerHTML= h + ":" + m + ":" + s + "" + session;
+    setTimeout(showTime,1000);
+}
+showTime();
+// this is battery js
+var c =document.getElementById("batCanvas");
+var ctx = c.getContext("2d");
+
+var batLevel = 0;
+
+navigator.getBattery().then(function(battery) {
+    function
+    updateAllBatteryInfo() {
+        updateChargeInfo();
+        updateLevelInfo();
+    }
+    updateAllBatteryInfo();
+
+    battery.addEventListener(' chargingchange',function(){
+        updateChargeInfo();
+    });
+    function
+    updateChargeInfo(){
+        console.log("Battery charging?" + 
+        (battery.charging ? "Yes": "No"));
+        if(battery.charging){
+            document.getElementById("bolt").style.visibility = "visible";
+            console.log("I am charging");
+        } else {
+            document.getElementById("bolt").style.visibility = "hidden";
+            console.log("I am not charging");
+        }
+    }
+
+    battery.addEventListener('levelchange',function(){
+        updateLevelInfo();
+    });
+    function updateLevelInfo(){
+        var batteryL = battery.level;
+
+        console.log("Battery level: "+battery.level * 100 + "%");
+
+        batLevel = batteryL * 10;
+
+        document.getElementById("BatteryLevel").innerHTML = '<p>'+ Math.floor(batLevel * 10) + '%</p>';
+
+    }
+    var batL = Math.floor(batLevel);
+    switch(batL){
+        case 0:
+    console.log("Battery Level is <10");
+        break;
+        case 1:
+            ctx.fillRect(500, 250,100, 500);
+    console.log("Battery Level is < 10");
+        break;
+        case 2:
+            ctx.fillStyle = "#FF0800", 
+            ctx.fillRect(500, 250, 200, 500)
+        console.log("Battery Level is <20");
+           break;
+        case 3:
+            ctx.fillStyle = "#FF2E00", ctx.fillRect(500, 250, 300, 500);
+
+            console.log("Battery Level is < 30");
+            break;
+        case 4:
+            ctx.fillStyle = "#FF5400", ctx.fillRect(500, 250, 500, 500);
+            console.log("Battery Level is < 40");
+            break;
+
+        case 5:
+            ctx.fillStyle = "#FF7A00", ctx.fillRect(500, 250, 500, 500);
+            console.log("Battery Level is < 50");
+            break;
+
+        case 6:
+            ctx.fillStyle = "#FF9900", ctx.fillRect(500, 250, 600, 500);
+            console.log("Battery Level is < 60");
+            break;
+        case 7:
+            ctx.fillStyle = "#B2A800", ctx.fillRect(500, 250, 700, 500);
+            console.log("Battery Level is < 70");
+            break;
+        case 8:
+            ctx.fillStyle = "#73B500", ctx.fillRect(500, 250, 800, 500);
+            console.log("Battery Level is < 80");
+            break;
+        case 9:
+            ctx.fillStyle = "#33C200", ctx.fillRect(500, 250, 900, 500);
+            console.log("Battery Level is < 90");
+        break;
+        case 10:
+            ctx.fillStyle = "#00cc00", ctx.fillRect(500, 250, 1000, 500);
+            console.log("Battery Level is  100");
+        break;
+        default:
+            console.log("Battery Level not found");
+        break;
+  }
+
+  ctx.fillStyle = "#000000", ctx.fillRect(1500, 400, 50, 200);
+
+  ctx.lineWidth = 25;
+  ctx.strokeRect(500, 250, 1000, 500);
+
+});
+
+</script> 
+{%endblock %}  
+</body>
+</html>
